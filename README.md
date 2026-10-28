@@ -102,7 +102,7 @@ chmod +x start.sh stop.sh start.command stop.command
 - 页面保留轻量悬浮、光影与卡片视差动画，不遮挡主图
 - 图片来源及授权信息见 `frontend/public/images/jiangnan/ATTRIBUTION.md`
 - 已有数据库可执行 `sql/update-jiangnan-images.sql` 更新图片字段
-- 首页第 4 个轮播项使用 30 秒竖版视频，资源位于 rontend/public/videos/jiangnan-carousel.mp4，视频带原声，轮播停留 30 秒后自动切回图片
+- 首页第 4 个轮播项使用 49 秒竖版视频，资源位于 rontend/public/videos/jiangnan-carousel.mp4，视频带原声，轮播停留 49 秒后自动切回图片
 
 ## 架构
 

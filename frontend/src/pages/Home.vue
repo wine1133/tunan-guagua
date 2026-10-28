@@ -18,9 +18,9 @@
         <el-carousel-item>
           <div class="hero-slide video-slide">
             <div class="hero-copy video-copy">
-              <div class="eyebrow">JIANGNAN STORY · 30 SECONDS</div>
+              <div class="eyebrow">JIANGNAN STORY · 49 SECONDS</div>
               <h1>一城水巷，<br />藏着江南的温柔。</h1>
-              <p>橹声轻摇，白墙黛瓦倒映在水面。用 30 秒，走进一段属于江南的同城故事。</p>
+              <p>橹声轻摇，白墙黛瓦倒映在水面。用 49 秒，走进一段属于江南的同城故事。</p>
               <div class="hero-actions">
                 <el-button class="hero-primary" size="large" round @click="router.push('/news')">走进江南 <el-icon><Right /></el-icon></el-button>
                 <el-button class="hero-ghost" size="large" round @click="openPublish">分享我的此刻</el-button>
@@ -38,7 +38,7 @@
               <div class="video-stage-shade" />
               <button v-if="videoMuted" class="video-sound-btn" @click.stop="enableVideoSound">🔊 开启声音</button>
               <div v-else class="video-sound-state">🔊 声音已开启</div>
-              <div class="video-badge"><span class="video-dot" /> 江南影像 · 30″</div>
+              <div class="video-badge"><span class="video-dot" /> 江南影像 · 49″</div>
             </div>
           </div>
         </el-carousel-item>
@@ -187,7 +187,7 @@ function scheduleRotation() {
   rotationTimer = setTimeout(() => {
     const total = banners.value.length + 1
     carouselRef.value?.setActiveItem((currentSlide + 1) % total)
-  }, isVideo ? 30000 : 6500)
+  }, isVideo ? 49000 : 6500)
 }
 
 function onCarouselChange(index) {
