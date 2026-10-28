@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/circles' }">圈子广场</el-breadcrumb-item>
       <el-breadcrumb-item>{{ circle?.name || '圈子详情' }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <section v-if="circle" class="circle-detail-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(18, 35, 29, .92), rgba(18, 35, 29, .26)), url(${circle.cover || '/images/jiangnan/qibao-canal.jpg'})` }">
+    <section v-if="circle" class="circle-detail-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(18, 35, 29, .92), rgba(18, 35, 29, .26)), url(${assetUrl(circle.cover || '/images/jiangnan/qibao-canal.jpg')})` }">
       <div class="circle-symbol">◎</div>
       <div class="circle-detail-copy">
         <div class="eyebrow">TUNAN CIRCLE</div>
@@ -37,6 +37,7 @@ import { authState } from '../stores/auth'
 import PostCard from '../components/PostCard.vue'
 import EmptyState from '../components/EmptyState.vue'
 import PublishDialog from '../components/PublishDialog.vue'
+import { assetUrl } from '../utils/format'
 
 const route = useRoute()
 const router = useRouter()

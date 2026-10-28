@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/topics' }">话题广场</el-breadcrumb-item>
       <el-breadcrumb-item>{{ topic?.name || '话题详情' }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <section v-if="topic" class="topic-detail-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(18, 35, 29, .92), rgba(18, 35, 29, .26)), url(${topic.cover || '/images/jiangnan/tuisi-garden.jpg'})` }">
+    <section v-if="topic" class="topic-detail-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(18, 35, 29, .92), rgba(18, 35, 29, .26)), url(${assetUrl(topic.cover || '/images/jiangnan/tuisi-garden.jpg')})` }">
       <div class="topic-hash">#</div>
       <div class="topic-detail-copy">
         <div class="eyebrow">TRENDING NOW</div>
@@ -32,6 +32,7 @@ import { authState } from '../stores/auth'
 import PostCard from '../components/PostCard.vue'
 import EmptyState from '../components/EmptyState.vue'
 import PublishDialog from '../components/PublishDialog.vue'
+import { assetUrl } from '../utils/format'
 
 const route = useRoute()
 const router = useRouter()

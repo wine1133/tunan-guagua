@@ -5,7 +5,7 @@
       <div class="admin-filters"><el-input v-model="keyword" clearable placeholder="搜索资讯标题" style="width: 250px" @keyup.enter="load(1)" @clear="load(1)" /><el-button type="primary" @click="openCreate"><el-icon><Plus /></el-icon> 发布资讯</el-button></div>
     </div>
     <el-table v-loading="loading" :data="rows" class="admin-table">
-      <el-table-column label="封面" width="120"><template #default="{ row }"><img :src="row.cover" class="news-thumb" /></template></el-table-column>
+      <el-table-column label="封面" width="120"><template #default="{ row }"><img :src="assetUrl(row.cover)" class="news-thumb" /></template></el-table-column>
       <el-table-column prop="title" label="标题" min-width="300" />
       <el-table-column prop="city" label="城市" width="90" />
       <el-table-column label="状态" width="100"><template #default="{ row }"><el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">{{ row.status === 1 ? '已发布' : '草稿' }}</el-tag></template></el-table-column>
@@ -32,7 +32,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { newsApi } from '../../api'
-import { formatTime } from '../../utils/format'
+import { assetUrl, formatTime } from '../../utils/format'
 
 const rows = ref([])
 const keyword = ref('')

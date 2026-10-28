@@ -2,7 +2,7 @@
   <section class="admin-panel">
     <div class="admin-panel-header"><h2>首页轮播图</h2><el-button type="primary" @click="openCreate"><el-icon><Plus /></el-icon> 新增轮播图</el-button></div>
     <el-table v-loading="loading" :data="rows" class="admin-table">
-      <el-table-column label="预览" width="150"><template #default="{ row }"><img :src="row.imageUrl" class="banner-thumb" /></template></el-table-column>
+      <el-table-column label="预览" width="150"><template #default="{ row }"><img :src="assetUrl(row.imageUrl)" class="banner-thumb" /></template></el-table-column>
       <el-table-column prop="title" label="标题" min-width="220" />
       <el-table-column prop="linkUrl" label="跳转地址" min-width="180" show-overflow-tooltip />
       <el-table-column prop="sort" label="排序" width="80" />
@@ -27,6 +27,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { bannerApi } from '../../api'
+import { assetUrl } from '../../utils/format'
 
 const rows = ref([])
 const page = ref(1)

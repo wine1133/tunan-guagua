@@ -23,3 +23,10 @@ export function auditText(status) {
 export function auditType(status) {
   return { 0: 'warning', 1: 'success', 2: 'danger' }[status] || 'info'
 }
+export function assetUrl(path) {
+  if (!path) return ''
+  if (/^(https?:)?\/\//.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path
+  const base = import.meta.env.BASE_URL || '/'
+  if (path.startsWith(base)) return path
+  return `${base}${path.replace(/^\/+/, '')}`
+}

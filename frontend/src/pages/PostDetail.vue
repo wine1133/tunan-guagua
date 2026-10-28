@@ -35,7 +35,7 @@
           </div>
           <div class="prose">{{ post.content }}</div>
           <div v-if="post.images?.length" class="detail-images">
-            <img v-for="(image, index) in post.images" :key="image" :src="image" :alt="`${post.title}-${index + 1}`" loading="lazy" />
+            <img v-for="(image, index) in post.images" :key="image" :src="assetUrl(image)" :alt="`${post.title}-${index + 1}`" loading="lazy" />
           </div>
           <div class="action-row">
             <button class="action-btn" :class="{ active: post.liked }" @click="toggleLike"><el-icon><Pointer /></el-icon> {{ post.liked ? '已点赞' : '点赞' }} {{ post.likeCount }}</button>
@@ -108,7 +108,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { circleApi, commentApi, followApi, interactionApi, postApi } from '../api'
 import { authState } from '../stores/auth'
-import { auditText, formatTime } from '../utils/format'
+import { assetUrl, auditText, formatTime } from '../utils/format'
 import UserAvatar from '../components/UserAvatar.vue'
 import EmptyState from '../components/EmptyState.vue'
 

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <section class="page-hero posts-hero">
+    <section class="page-hero posts-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(29, 34, 29, .86), rgba(29, 34, 29, .2)), url(${assetUrl('/images/jiangnan/zhouzhuang-boat.jpg')})` }">
       <div class="eyebrow">TUNAN MOMENTS</div>
       <h1>把江南生活写成<br />一封同城来信。</h1>
       <p>一顿好吃的饭、一场说走就走的散步、一次真诚的求助，都值得被看见。</p>
@@ -27,6 +27,7 @@ import { authState } from '../stores/auth'
 import PostCard from '../components/PostCard.vue'
 import EmptyState from '../components/EmptyState.vue'
 import PublishDialog from '../components/PublishDialog.vue'
+import { assetUrl } from '../utils/format'
 
 const route = useRoute()
 const router = useRouter()

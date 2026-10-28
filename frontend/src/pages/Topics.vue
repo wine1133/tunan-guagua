@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <section class="page-hero topics-hero">
+    <section class="page-hero topics-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(20, 31, 42, .88), rgba(20, 31, 42, .24)), url(${assetUrl('/images/jiangnan/wuzhen-aerial.jpg')})` }">
       <div class="eyebrow">TRENDING TOPICS</div>
       <h1>每个江南话题，<br />都是一次同频相遇。</h1>
       <p>参与正在发生的讨论，让你的观点被更多人听见。热度来自真实互动，也来自每一份认真表达。</p>
@@ -15,7 +15,7 @@
     <div v-loading="loading" class="topic-grid">
       <article v-for="(topic, index) in topics" :key="topic.id" class="topic-card jiangnan-card" @click="router.push(`/topics/${topic.id}`)">
         <div class="topic-cover">
-          <img :src="topic.cover || '/images/jiangnan/tuisi-garden.jpg'" :alt="topic.name" loading="lazy" />
+          <img :src="assetUrl(topic.cover || '/images/jiangnan/tuisi-garden.jpg')" :alt="topic.name" loading="lazy" />
           <div class="topic-cover-shade" />
           <div class="topic-top"><span class="topic-rank">TOP {{ String(index + 1).padStart(2, '0') }}</span><span class="topic-heat">🔥 {{ topic.heat }}</span></div>
         </div>
@@ -44,6 +44,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { assetUrl } from '../utils/format'
 import { ElMessage } from 'element-plus'
 import { topicApi } from '../api'
 import { authState } from '../stores/auth'

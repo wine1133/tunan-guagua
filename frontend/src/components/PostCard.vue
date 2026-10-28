@@ -11,7 +11,7 @@
     <h3>{{ post.title }}</h3>
     <p>{{ excerpt(post.content, 92) }}</p>
     <div v-if="post.images?.length" class="post-cover">
-      <img :src="post.images[0]" :alt="post.title" loading="lazy" />
+      <img :src="assetUrl(post.images[0])" :alt="post.title" loading="lazy" />
     </div>
     <div class="post-card-foot">
       <span><el-icon><View /></el-icon> {{ post.viewCount || 0 }}</span>
@@ -25,7 +25,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import UserAvatar from './UserAvatar.vue'
-import { excerpt, formatTime } from '../utils/format'
+import { assetUrl, excerpt, formatTime } from '../utils/format'
 
 const props = defineProps({ post: { type: Object, required: true } })
 const router = useRouter()

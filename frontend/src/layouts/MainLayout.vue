@@ -17,6 +17,7 @@
           <router-link to="/news" class="nav-item" :class="{ active: route.name?.startsWith('news') }">同城资讯</router-link>
         </nav>
         <div class="header-actions">
+          <span v-if="demoMode" class="demo-badge">在线演示</span>
           <el-button class="publish-btn" round @click="openPublish"><el-icon><Plus /></el-icon> 发布</el-button>
           <template v-if="authState.user">
             <el-dropdown trigger="click">
@@ -72,6 +73,7 @@ import { authState, logout, refreshUser } from '../stores/auth'
 const route = useRoute()
 const router = useRouter()
 const publishVisible = ref(false)
+const demoMode = import.meta.env.VITE_DEMO_MODE === 'true'
 
 const openPublish = () => {
   if (!authState.token) {
@@ -112,6 +114,7 @@ onBeforeUnmount(() => window.removeEventListener('guagua-auth-expired', expireHa
 .nav-item.active, .nav-item:hover { color: var(--ink); }
 .nav-item.active::after { width: 18px; }
 .header-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.demo-badge { padding: 5px 9px; border-radius: 999px; background: #e5f1ed; color: var(--teal); font-size: 10px; font-weight: 700; white-space: nowrap; }
 .publish-btn { background: var(--ink); color: white; border-color: var(--ink); padding: 10px 18px; }
 .publish-btn:hover { background: var(--coral); border-color: var(--coral); color: white; }
 .user-trigger { display: flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--ink); cursor: pointer; font-size: 14px; font-weight: 600; }

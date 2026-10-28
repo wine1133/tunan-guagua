@@ -9,7 +9,7 @@
         <div class="eyebrow">{{ article.city }} · LOCAL NEWS</div>
         <h1>{{ article.title }}</h1>
         <div class="news-meta detail-news-meta"><span>{{ formatTime(article.createdAt) }}</span><span>{{ article.viewCount }} 阅读</span><span>兔南呱呱编辑部</span></div>
-        <img v-if="article.cover" :src="article.cover" :alt="article.title" class="news-cover" />
+        <img v-if="article.cover" :src="assetUrl(article.cover)" :alt="article.title" class="news-cover" />
         <p class="news-summary">{{ article.summary }}</p>
         <div class="prose">{{ article.content }}</div>
         <div class="article-end">— 完 —</div>
@@ -36,7 +36,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { newsApi } from '../api'
-import { formatTime } from '../utils/format'
+import { assetUrl, formatTime } from '../utils/format'
 
 const route = useRoute()
 const router = useRouter()

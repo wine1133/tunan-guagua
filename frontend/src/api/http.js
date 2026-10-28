@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { createDemoAdapter } from './demo'
 
 const http = axios.create({
   baseURL: '/api',
   timeout: 12000
 })
+
+if (import.meta.env.VITE_DEMO_MODE === 'true') {
+  http.defaults.adapter = createDemoAdapter()
+}
 
 http.interceptors.request.use((config) => {
   const token = localStorage.getItem('guagua_token')

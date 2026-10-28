@@ -1,5 +1,12 @@
 # 兔南呱呱同城网
 
+## 在线演示
+
+- 公网演示站：https://wine1133.github.io/tunan-guagua/
+- GitHub 仓库：https://github.com/wine1133/tunan-guagua
+
+> GitHub Pages 为前端演示模式，使用浏览器内演示数据，包含用户端与管理端完整交互；正式微服务版本需要 Docker、MySQL、Redis、Nacos 运行。
+
 一套可直接运行的前后端分离同城社区项目。项目围绕“圈子、话题、帖子、评论、收藏、关注、点赞、资讯、轮播图”构建，采用 Spring Cloud Alibaba 微服务架构，并使用 Redisson 分布式锁保护帖子更新。
 
 ## 一键启动（Windows）
@@ -309,6 +316,7 @@ docker compose down -v
 - 数据库读写分离、分库分表与审计日志
 - 消息队列解耦点赞/评论等高并发写操作
 - Prometheus + Grafana + SkyWalking 可观测体系
+
 
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <section class="page-hero circles-hero">
+    <section class="page-hero circles-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(26, 34, 30, .84), rgba(26, 34, 30, .28)), url(${assetUrl('/images/jiangnan/xitang-dusk-2.jpg')})` }">
       <div class="eyebrow">CIRCLE SQUARE</div>
       <h1>找到属于你的<br />江南同城小宇宙。</h1>
       <p>美食、运动、摄影、萌宠……在真实的生活兴趣里，认识真正聊得来的人。</p>
@@ -19,7 +19,7 @@
     <div v-loading="loading" class="card-grid">
       <article v-for="(circle, index) in circles" :key="circle.id" class="circle-card jiangnan-card" @click="router.push(`/circles/${circle.id}`)">
         <div class="circle-cover">
-          <img :src="circle.cover || '/images/jiangnan/qibao-canal.jpg'" :alt="circle.name" loading="lazy" />
+          <img :src="assetUrl(circle.cover || '/images/jiangnan/qibao-canal.jpg')" :alt="circle.name" loading="lazy" />
           <div class="cover-shade" />
           <span class="circle-icon">{{ icons[index % icons.length] }}</span>
         </div>
@@ -49,6 +49,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { assetUrl } from '../utils/format'
 import { ElMessage } from 'element-plus'
 import { circleApi } from '../api'
 import { authState } from '../stores/auth'

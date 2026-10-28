@@ -3,7 +3,7 @@
     <section class="home-hero">
       <el-carousel v-if="banners.length" height="470px" :interval="5000" arrow="always" indicator-position="outside">
         <el-carousel-item v-for="banner in banners" :key="banner.id">
-          <div class="hero-slide" :style="{ backgroundImage: `url(${banner.imageUrl})` }">
+          <div class="hero-slide" :style="{ backgroundImage: `url(${assetUrl(banner.imageUrl)})` }">
             <div class="hero-copy">
               <div class="eyebrow">TUNAN · LOCAL LIFE</div>
               <h1>{{ banner.title }}</h1>
@@ -40,7 +40,7 @@
         <div v-loading="loading" class="card-grid home-circles">
           <article v-for="(circle, index) in circles" :key="circle.id" class="circle-card home-circle-card" @click="router.push(`/circles/${circle.id}`)">
             <div class="home-circle-cover">
-              <img :src="circle.cover || '/images/jiangnan/qibao-canal.jpg'" :alt="circle.name" loading="lazy" />
+              <img :src="assetUrl(circle.cover || '/images/jiangnan/qibao-canal.jpg')" :alt="circle.name" loading="lazy" />
               <div class="home-cover-shade" />
               <span class="circle-icon">{{ circleIcons[index % circleIcons.length] }}</span>
             </div>
@@ -86,7 +86,7 @@
         </div>
         <div v-loading="loading" class="news-grid">
           <article v-for="item in news" :key="item.id" class="news-card" @click="router.push(`/news/${item.id}`)">
-            <img :src="item.cover" :alt="item.title" />
+            <img :src="assetUrl(item.cover)" :alt="item.title" />
             <div><h3>{{ item.title }}</h3><p>{{ item.summary }}</p><div class="news-meta"><span>{{ item.city }}</span><span>{{ item.viewCount }} 阅读</span></div></div>
           </article>
         </div>
@@ -99,6 +99,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { assetUrl } from '../utils/format'
 import { bannerApi, circleApi, newsApi, postApi, topicApi } from '../api'
 import { authState } from '../stores/auth'
 import PostCard from '../components/PostCard.vue'

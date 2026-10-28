@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 
@@ -40,8 +40,12 @@ const routes = [
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
+const routerHistory = import.meta.env.VITE_DEMO_MODE === 'true'
+  ? createWebHashHistory(import.meta.env.BASE_URL)
+  : createWebHistory(import.meta.env.BASE_URL)
+
 const router = createRouter({
-  history: createWebHistory(),
+  history: routerHistory,
   routes,
   scrollBehavior() {
     return { top: 0 }

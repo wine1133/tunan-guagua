@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <section class="page-hero news-hero">
+    <section class="page-hero news-hero" :style="{ backgroundImage: `linear-gradient(90deg, rgba(28, 32, 28, .86), rgba(28, 32, 28, .16)), url(${assetUrl('/images/jiangnan/suzhou-canal.jpg')})` }">
       <div class="eyebrow">TUNAN LOCAL NEWS</div>
       <h1>读懂江南，<br />从身边的新鲜事开始。</h1>
       <p>城市更新、交通变化、周末活动和生活指南，为你筛选真正有用的本地资讯。</p>
@@ -14,7 +14,7 @@
     </div>
     <div v-loading="loading" class="news-list">
       <article v-for="item in news" :key="item.id" class="news-card" @click="router.push(`/news/${item.id}`)">
-        <img :src="item.cover" :alt="item.title" loading="lazy" />
+        <img :src="assetUrl(item.cover)" :alt="item.title" loading="lazy" />
         <div class="news-card-body">
           <div class="news-meta"><span>{{ item.city }}资讯</span><span>{{ formatTime(item.createdAt) }}</span><span>{{ item.viewCount }} 阅读</span></div>
           <h3>{{ item.title }}</h3>
@@ -32,7 +32,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { newsApi } from '../api'
-import { formatTime } from '../utils/format'
+import { assetUrl, formatTime } from '../utils/format'
 import EmptyState from '../components/EmptyState.vue'
 
 const router = useRouter()
