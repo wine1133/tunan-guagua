@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="home-hero">
-      <el-carousel v-if="banners.length" height="470px" :interval="5000" arrow="always" indicator-position="outside">
+      <el-carousel v-if="banners.length" ref="carouselRef" height="470px" :autoplay="false" arrow="always" indicator-position="outside" @change="onCarouselChange">
         <el-carousel-item v-for="banner in banners" :key="banner.id">
           <div class="hero-slide" :style="{ backgroundImage: `url(${assetUrl(banner.imageUrl)})` }">
             <div class="hero-copy">
@@ -12,6 +12,33 @@
                 <el-button class="hero-primary" size="large" round @click="router.push(banner.linkUrl || '/circles')">现在去逛逛 <el-icon><Right /></el-icon></el-button>
                 <el-button class="hero-ghost" size="large" round @click="openPublish">分享我的此刻</el-button>
               </div>
+            </div>
+          </div>
+        </el-carousel-item>
+        <el-carousel-item>
+          <div class="hero-slide video-slide">
+            <div class="hero-copy video-copy">
+              <div class="eyebrow">JIANGNAN STORY · 30 SECONDS</div>
+              <h1>一城水巷，<br />藏着江南的温柔。</h1>
+              <p>橹声轻摇，白墙黛瓦倒映在水面。用 30 秒，走进一段属于江南的同城故事。</p>
+              <div class="hero-actions">
+                <el-button class="hero-primary" size="large" round @click="router.push('/news')">走进江南 <el-icon><Right /></el-icon></el-button>
+                <el-button class="hero-ghost" size="large" round @click="openPublish">分享我的此刻</el-button>
+              </div>
+            </div>
+            <div class="video-stage">
+              <video
+                ref="carouselVideo"
+                class="carousel-video"
+                :src="videoUrl"
+                :poster="assetUrl('/images/jiangnan/tuisi-garden.jpg')"
+                playsinline
+                preload="metadata"
+              />
+              <div class="video-stage-shade" />
+              <button v-if="videoMuted" class="video-sound-btn" @click.stop="enableVideoSound">🔊 开启声音</button>
+              <div v-else class="video-sound-state">🔊 声音已开启</div>
+              <div class="video-badge"><span class="video-dot" /> 江南影像 · 30″</div>
             </div>
           </div>
         </el-carousel-item>
@@ -97,7 +124,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { assetUrl } from '../utils/format'
 import { bannerApi, circleApi, newsApi, postApi, topicApi } from '../api'
@@ -108,6 +135,12 @@ import PublishDialog from '../components/PublishDialog.vue'
 const router = useRouter()
 const loading = ref(true)
 const publishVisible = ref(false)
+const carouselRef = ref(null)
+const carouselVideo = ref(null)
+const videoUrl = assetUrl('/videos/jiangnan-carousel.mp4')
+const videoMuted = ref(true)
+let rotationTimer = null
+let currentSlide = 0
 const banners = ref([])
 const circles = ref([])
 const topics = ref([])
@@ -115,6 +148,52 @@ const posts = ref([])
 const news = ref([])
 const stats = reactive({ posts: 0, circles: 0, topics: 0, news: 0 })
 const circleIcons = ['🍜', '🏕️', '🐾', '📷', '🎨', '🚴']
+
+function pauseHeroVideo() {
+  carouselVideo.value?.pause()
+}
+
+function startHeroVideo() {
+  const video = carouselVideo.value
+  if (!video) return
+  video.currentTime = 0
+  video.muted = false
+  video.volume = 1
+  video.play()
+    .then(() => { videoMuted.value = false })
+    .catch(() => {
+      video.muted = true
+      videoMuted.value = true
+      video.play().catch(() => {})
+    })
+}
+
+function enableVideoSound() {
+  const video = carouselVideo.value
+  if (!video) return
+  video.muted = false
+  video.volume = 1
+  video.play()
+    .then(() => { videoMuted.value = false })
+    .catch(() => { videoMuted.value = true })
+}
+
+function scheduleRotation() {
+  if (rotationTimer) clearTimeout(rotationTimer)
+  const videoIndex = banners.value.length
+  const isVideo = currentSlide === videoIndex
+  if (isVideo) startHeroVideo()
+  else pauseHeroVideo()
+  rotationTimer = setTimeout(() => {
+    const total = banners.value.length + 1
+    carouselRef.value?.setActiveItem((currentSlide + 1) % total)
+  }, isVideo ? 30000 : 6500)
+}
+
+function onCarouselChange(index) {
+  currentSlide = index
+  scheduleRotation()
+}
 
 function openPublish() {
   if (!authState.token) {
@@ -144,7 +223,15 @@ onMounted(async () => {
     stats.news = newsPage.total || 0
   } finally {
     loading.value = false
+    await nextTick()
+    currentSlide = 0
+    scheduleRotation()
   }
+})
+
+onBeforeUnmount(() => {
+  if (rotationTimer) clearTimeout(rotationTimer)
+  pauseHeroVideo()
 })
 </script>
 
@@ -200,7 +287,26 @@ onMounted(async () => {
 .home-circle-body p { min-height: 42px; }
 @keyframes card-rise { from { opacity: 0; transform: translateY(26px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes hero-sheen { 0%, 100% { transform: translateX(-140%) rotate(14deg); opacity: 0; } 45% { opacity: .75; } 70% { transform: translateX(580%) rotate(14deg); opacity: 0; } }
+
+.video-slide { padding-right: 0; background: linear-gradient(90deg, rgba(11, 28, 23, .97), rgba(14, 33, 27, .84)), url('/images/jiangnan/zhouzhuang-lanterns-hero.jpg') center / cover; }
+.video-slide::before { background: linear-gradient(90deg, rgba(8, 23, 19, .94) 0%, rgba(8, 23, 19, .82) 44%, rgba(8, 23, 19, .16) 58%, transparent 100%); }
+.video-copy { max-width: 46%; }
+.video-copy h1 { font-size: clamp(32px, 4.5vw, 54px); }
+.video-stage { position: absolute; z-index: 5; top: 0; right: 0; width: 50%; height: 100%; overflow: hidden; background: #13231f; box-shadow: -24px 0 55px rgba(0,0,0,.28); }
+.video-stage::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 90px; z-index: 3; background: linear-gradient(90deg, rgba(11,28,23,.42), transparent); pointer-events: none; }
+.carousel-video { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
+.video-stage-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(8, 20, 16, .02) 55%, rgba(8, 20, 16, .46) 100%); }
+.video-badge { position: absolute; right: 16px; bottom: 15px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px; background: rgba(11, 27, 22, .63); border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.92); font-size: 11px; backdrop-filter: blur(14px); }
+.video-sound-btn, .video-sound-state { position: absolute; left: 16px; bottom: 15px; z-index: 4; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 8px 13px; background: rgba(8, 25, 20, .7); color: white; font-size: 11px; font-weight: 700; backdrop-filter: blur(14px); }
+.video-sound-btn { cursor: pointer; animation: sound-breathe 1.8s ease-in-out infinite; }
+.video-sound-btn:hover { background: var(--coral); border-color: var(--coral); }
+.video-sound-state { opacity: .78; }
+.video-dot { width: 7px; height: 7px; border-radius: 50%; background: #ff6e4a; box-shadow: 0 0 14px #ff6e4a; animation: video-pulse 1.8s ease-in-out infinite; }
+@keyframes sound-breathe { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(245,102,79,0); } 50% { transform: scale(1.04); box-shadow: 0 0 22px rgba(245,102,79,.35); } }
+@keyframes video-pulse { 0%, 100% { opacity: .6; transform: scale(.82); } 50% { opacity: 1; transform: scale(1.15); } }
 @media (max-width: 1000px) {
+  .video-stage { right: 0; width: 50%; height: 100%; top: 0; }
+  .video-copy { max-width: 44%; }
   .home-split { grid-template-columns: 1fr; }
   .home-side { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .news-grid { grid-template-columns: 1fr; }
@@ -208,6 +314,10 @@ onMounted(async () => {
   .news-grid .news-card img { height: 120px; }
 }
 @media (max-width: 760px) {
+  .video-stage { top: 0; right: 0; width: 54%; height: 100%; opacity: 1; }
+  .video-copy { max-width: 40%; }
+  .video-copy h1 { font-size: 30px; }
+  .video-copy p { font-size: 12px; }
   .hero-copy { max-width: 100%; }
   .home-hero { padding: 0 15px; margin-top: 15px; }
   .hero-slide, .hero-fallback { padding: 38px 26px; }
@@ -219,12 +329,18 @@ onMounted(async () => {
   .news-grid .news-card img { height: 105px; }
 }
 @media (max-width: 520px) {
+  .video-stage { top: 0; right: 0; width: 55%; height: 100%; opacity: 1; }
+  .video-copy { max-width: 42%; }
+  .video-copy h1 { font-size: 26px; }
+  .video-sound-btn, .video-sound-state { left: 9px; bottom: 9px; padding: 6px 9px; font-size: 9px; }
+  .video-badge { right: 8px; bottom: 9px; padding: 5px 8px; font-size: 9px; }
   .hero-copy h1 { font-size: 32px; }
   .hero-copy p { font-size: 13px; }
   .stats-strip { padding: 16px 8px; }
   .stats-strip strong { font-size: 17px; }
 }
 </style>
+
 
 
 
