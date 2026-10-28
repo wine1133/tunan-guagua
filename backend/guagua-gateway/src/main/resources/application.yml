@@ -1,0 +1,45 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+
+spring:
+  application:
+    name: guagua-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDR:localhost:8848}
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: guagua-user-service
+          uri: lb://guagua-user-service
+          predicates:
+            - Path=/api/auth/**,/api/users/**,/api/follows/**,/api/admin/users/**
+        - id: guagua-content-service
+          uri: lb://guagua-content-service
+          predicates:
+            - Path=/api/circles,/api/circles/**,/api/topics,/api/topics/**,/api/banners,/api/banners/**,/api/news,/api/news/**,/api/admin/circles/**,/api/admin/topics/**,/api/admin/banners/**,/api/admin/news/**,/api/admin/content/**
+        - id: guagua-post-service
+          uri: lb://guagua-post-service
+          predicates:
+            - Path=/api/posts,/api/posts/**,/api/comments/**,/api/likes/**,/api/favorites/**,/api/admin/posts/**,/api/admin/comments/**,/api/admin/likes/**,/api/admin/favorites/**,/api/admin/stats/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+

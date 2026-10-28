@@ -1,0 +1,51 @@
+server:
+  port: ${POST_SERVICE_PORT:8083}
+
+spring:
+  application:
+    name: guagua-post-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3307}/guagua_post?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:guagua123}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6380}
+      password: ${REDIS_PASSWORD:}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDR:localhost:8848}
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 3000
+            readTimeout: 5000
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+
+guagua:
+  jwt:
+    secret: ${JWT_SECRET:tn-guagua-2026-please-change-this-long-secret-key}
+    expire-hours: 168
+  lock:
+    post-update-wait-seconds: 3
+    post-update-lease-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.tunan.guagua.post: INFO
+    com.tunan.guagua.post.client: INFO
